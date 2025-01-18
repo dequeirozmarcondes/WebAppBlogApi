@@ -2,7 +2,7 @@
 {
     public class Post
     {
-        public string? Id { get; private set; }
+        public string? Id { get; private set; } // Id será gerado pelo banco de dados
         public string Title { get; private set; }
         public string Content { get; private set; }
         public DateTime CreatedAt { get; private set; }
@@ -12,10 +12,11 @@
         public string? CategoryId { get; private set; } // Foreign Key
         public Category? Category { get; private set; } // Navigation Property
 
-        public List<Image> Images { get; private set; }
-        public List<Comment> Comments { get; private set; }
-        public List<Tag> Tags { get; private set; }
+        public List<Image> Images { get; private set; } = [];
+        public List<Comment> Comments { get; private set; } = [];
+        public List<Tag> Tags { get; private set; } = [];
         public int LikeCount { get; private set; }
+
         public Post(string title, string content, string userId, ApplicationUser user)
         {
             if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title is required");
@@ -28,9 +29,6 @@
             UpdatedAt = DateTime.UtcNow;
             UserId = userId;
             User = user;
-            Images = new List<Image>(); // Inicializando a lista corretamente
-            Comments = new List<Comment>(); // Inicializando a lista corretamente
-            Tags = new List<Tag>(); // Inicializando a lista corretamente
         }
 
         public void UpdatePost(string title, string content)

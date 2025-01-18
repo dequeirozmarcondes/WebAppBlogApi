@@ -1,4 +1,6 @@
-﻿namespace WebAppBlogApi.Core.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAppBlogApi.Core.Entities
 {
     public class Comment
     {
@@ -6,9 +8,11 @@
         public string Content { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
+        [ForeignKey("User")]
         public string UserId { get; private set; } // Foreign Key
         public ApplicationUser User { get; private set; } // Navigation Property
-        public string PostId { get; private set; } // Foreign Key
+        [ForeignKey("Post")]
+        public string PostId { get; private set; } // Foreign Key       
         public Post Post { get; private set; } // Navigation Property
 
         public Comment(string content, string userId, ApplicationUser user, string postId, Post post)

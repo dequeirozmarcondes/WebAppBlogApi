@@ -1,13 +1,15 @@
-﻿namespace WebAppBlogApi.Core.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAppBlogApi.Core.Entities
 {
     public class Image
     {
-        public string? Id { get; private set; }
+        public string? Id { get; private set; } // Id será gerado pelo banco de dados
         public string Url { get; private set; }
         public string? Caption { get; private set; }
+        [ForeignKey("Post")]
         public string PostId { get; private set; } // Foreign Key
         public Post Post { get; private set; } // Navigation Property
-
         public Image(string url, string postId, Post post, string? caption = null)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentException("URL is required");

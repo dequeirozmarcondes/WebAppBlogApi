@@ -11,7 +11,6 @@
             if (string.IsNullOrEmpty(name)) throw new ArgumentException("Name is required");
 
             Name = name;
-            Posts = [];
         }
 
         public void AddPost(Post post)
