@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using WebAppBlogApi.Core.Entities;
 
