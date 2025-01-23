@@ -3,16 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Raven.Client.Documents.Session;
 using WebAppBlogApi.Core.Entities;
 
-namespace WebAppBlogApi.Infrastructure
+namespace WebAppBlogApi.Infrastructure.Data.AppDbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext(IAsyncDocumentSession session) : IdentityDbContext<ApplicationUser>
     {
-        private readonly IAsyncDocumentSession _session;
-
-        public ApplicationDbContext(IAsyncDocumentSession session)
-        {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
-        }
+        private readonly IAsyncDocumentSession _session = session ?? throw new ArgumentNullException(nameof(session));
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }

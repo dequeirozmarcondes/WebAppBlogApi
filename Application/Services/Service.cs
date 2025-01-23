@@ -4,14 +4,9 @@ using WebAppBlogApi.Application.IServices;
 
 namespace WebAppBlogApi.Application.Services
 {
-    public class ApplicationUserService : IApplicationUserService
+    public class ApplicationUserService(IApplicationUserRepository userRepository) : IApplicationUserService
     {
-        private readonly IApplicationUserRepository _userRepository;
-
-        public ApplicationUserService(IApplicationUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IApplicationUserRepository _userRepository = userRepository;
 
         public async Task<ApplicationUser> GetByIdAsync(string id)
         {

@@ -3,23 +3,15 @@ using WebAppBlogApi.Core.Entities;
 using WebAppBlogApi.Application.IServices;
 using WebAppBlogApi.Application.DTOs;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebAppBlogApi.Presentation.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class ApplicationUserController : ControllerBase
+    public class ApplicationUserController(IApplicationUserService userService, UserManager<ApplicationUser> userManager) : ControllerBase
     {
-        private readonly IApplicationUserService _userService;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public ApplicationUserController(IApplicationUserService userService, UserManager<ApplicationUser> userManager)
-        {
-            _userService = userService;
-            _userManager = userManager;
-        }
+        private readonly IApplicationUserService _userService = userService;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetById(string id)
@@ -35,6 +27,11 @@ namespace WebAppBlogApi.Presentation.Controllers
                 if (user == null)
                 {
                     return NotFound();
+                }
+
+                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
+                {
+                    return StatusCode(500, "User data is incomplete.");
                 }
 
                 var userDto = new ApplicationUserResponseDTO(
@@ -73,6 +70,11 @@ namespace WebAppBlogApi.Presentation.Controllers
                     return NotFound();
                 }
 
+                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
+                {
+                    return StatusCode(500, "User data is incomplete.");
+                }
+
                 var userDto = new ApplicationUserResponseDTO(
                     user.Id,
                     user.FullName,
@@ -99,16 +101,26 @@ namespace WebAppBlogApi.Presentation.Controllers
             try
             {
                 var users = await _userService.GetAllAsync();
-                var userDtos = users.Select(user => new ApplicationUserResponseDTO(
-                    user.Id,
-                    user.FullName,
-                    user.UserName,
-                    user.Email,
-                    user.Bio,
-                    user.ProfilePicture,
-                    user.Posts,
-                    user.Comments
-                )).ToList();
+                var userDtos = users.Select(user =>
+                {
+                    if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
+                    {
+                        // Skip users with incomplete data
+                        return null;
+                    }
+
+                    return new ApplicationUserResponseDTO(
+                        user.Id,
+                        user.FullName,
+                        user.UserName,
+                        user.Email,
+                        user.Bio,
+                        user.ProfilePicture,
+                        user.Posts,
+                        user.Comments
+                    );
+                }).Where(dto => dto != null).ToList();
+
                 return Ok(userDtos);
             }
             catch (Exception ex)
@@ -135,6 +147,11 @@ namespace WebAppBlogApi.Presentation.Controllers
                 if (!result.Succeeded)
                 {
                     return BadRequest(result.Errors);
+                }
+
+                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
+                {
+                    return StatusCode(500, "User ID is missing.");
                 }
 
                 var responseDto = new ApplicationUserResponseDTO(

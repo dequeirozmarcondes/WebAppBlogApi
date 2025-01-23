@@ -5,14 +5,9 @@ using Raven.Client.Documents;
 
 namespace WebAppBlogApi.Infrastructure.Data.Repository
 {
-    public class ApplicationUserRepository : IApplicationUserRepository
+    public class ApplicationUserRepository(IAsyncDocumentSession session) : IApplicationUserRepository
     {
-        private readonly IAsyncDocumentSession _session;
-
-        public ApplicationUserRepository(IAsyncDocumentSession session)
-        {
-            _session = session;
-        }
+        private readonly IAsyncDocumentSession _session = session;
 
         public async Task<ApplicationUser> GetByIdAsync(string id)
         {

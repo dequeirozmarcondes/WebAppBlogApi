@@ -5,14 +5,9 @@ using WebAppBlogApi.Core.Entities;
 
 namespace WebAppBlogApi.Infrastructure.Data.RavenDb
 {
-    public class RavenUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>
+    public class RavenUserStore(IAsyncDocumentSession session) : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>
     {
-        private readonly IAsyncDocumentSession _session;
-
-        public RavenUserStore(IAsyncDocumentSession session)
-        {
-            _session = session ?? throw new ArgumentNullException(nameof(session));
-        }
+        private readonly IAsyncDocumentSession _session = session ?? throw new ArgumentNullException(nameof(session));
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
