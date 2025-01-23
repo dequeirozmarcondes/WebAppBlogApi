@@ -10,16 +10,10 @@ namespace WebAppBlogApi.Presentation.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class ApplicationUserController : ControllerBase
+    public class ApplicationUserController(IApplicationUserService userService, UserManager<ApplicationUser> userManager) : ControllerBase
     {
-        private readonly IApplicationUserService _userService;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public ApplicationUserController(IApplicationUserService userService, UserManager<ApplicationUser> userManager)
-        {
-            _userService = userService;
-            _userManager = userManager;
-        }
+        private readonly IApplicationUserService _userService = userService;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetById(string id)
@@ -75,7 +69,7 @@ namespace WebAppBlogApi.Presentation.Controllers
             return Ok(userDto);
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userService.GetAllAsync();
@@ -92,7 +86,7 @@ namespace WebAppBlogApi.Presentation.Controllers
             return Ok(userDtos);
         }
 
-        [HttpPost]
+        [HttpPost("addUser")]
         public async Task<IActionResult> Add([FromBody] ApplicationUserCreateDTO userDto)
         {
             if (userDto == null)
@@ -121,7 +115,7 @@ namespace WebAppBlogApi.Presentation.Controllers
             return CreatedAtAction(nameof(GetById), new { id = user.Id }, responseDto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("updateUser/{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] ApplicationUserUpdateDTO userDto)
         {
             if (string.IsNullOrEmpty(id))
@@ -145,7 +139,7 @@ namespace WebAppBlogApi.Presentation.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("deleteUser/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id))
