@@ -27,7 +27,9 @@ static X509Certificate2 LoadCertificate(string path)
 
     if (certType == X509ContentType.Pfx || certType == X509ContentType.Authenticode)
     {
+#pragma warning disable SYSLIB0057 // O tipo ou membro é obsoleto
         return new X509Certificate2(path);
+#pragma warning restore SYSLIB0057 // O tipo ou membro é obsoleto
     }
 
     throw new CryptographicException($"O tipo do certificado no caminho especificado ({certType}) não é compatível.");

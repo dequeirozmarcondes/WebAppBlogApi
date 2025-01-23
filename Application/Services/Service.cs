@@ -4,38 +4,97 @@ using WebAppBlogApi.Application.IServices;
 
 namespace WebAppBlogApi.Application.Services
 {
-    public class ApplicationUserService(IApplicationUserRepository userRepository) : IApplicationUserService
+    public class ApplicationUserService : IApplicationUserService
     {
-        private readonly IApplicationUserRepository _userRepository = userRepository;
+        private readonly IApplicationUserRepository _userRepository;
+
+        public ApplicationUserService(IApplicationUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
 
         public async Task<ApplicationUser> GetByIdAsync(string id)
         {
-            return await _userRepository.GetByIdAsync(id);
+            try
+            {
+                return await _userRepository.GetByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException($"Error fetching user by Id: {id}", ex);
+            }
         }
 
         public async Task<ApplicationUser> GetByUsernameAsync(string username)
         {
-            return await _userRepository.GetByUsernameAsync(username);
+            try
+            {
+                return await _userRepository.GetByUsernameAsync(username);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException($"Error fetching user by Username: {username}", ex);
+            }
         }
 
         public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+            try
+            {
+                return await _userRepository.GetAllAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException("Error fetching all users", ex);
+            }
         }
 
         public async Task AddAsync(ApplicationUser user)
         {
-            await _userRepository.AddAsync(user);
+            try
+            {
+                await _userRepository.AddAsync(user);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException("Error adding user", ex);
+            }
         }
 
         public async Task UpdateAsync(ApplicationUser user)
         {
-            await _userRepository.UpdateAsync(user);
+            try
+            {
+                await _userRepository.UpdateAsync(user);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException($"Error updating user with Id: {user.Id}", ex);
+            }
         }
 
         public async Task DeleteAsync(string id)
         {
-            await _userRepository.DeleteAsync(id);
+            try
+            {
+                await _userRepository.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and rethrow or handle it
+                // LogException(ex);
+                throw new ApplicationException($"Error deleting user with Id: {id}", ex);
+            }
         }
     }
 }
