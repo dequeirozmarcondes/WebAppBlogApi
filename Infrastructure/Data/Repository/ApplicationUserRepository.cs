@@ -1,8 +1,6 @@
 ﻿using Raven.Client.Documents.Session;
 using WebAppBlogApi.Core.Entities;
 using WebAppBlogApi.Core.IRepository;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Raven.Client.Documents;
 
 namespace WebAppBlogApi.Infrastructure.Data.Repository

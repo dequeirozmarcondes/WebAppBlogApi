@@ -2,10 +2,10 @@
 
 namespace WebAppBlogApi.Application.DTOs
 {
-    public record ApplicationUserDTO(
+    public record ApplicationUserCreateDTO(
         [Required]
         [StringLength(100, MinimumLength = 3)]
-        string Name,
+        string FullName,
 
         [Required]
         [StringLength(100, MinimumLength = 3)]
@@ -13,7 +13,11 @@ namespace WebAppBlogApi.Application.DTOs
 
         [Required]
         [EmailAddress]
-        string Email
+        string Email,
+
+        [Required]
+        [StringLength(100, MinimumLength = 6)]
+        string Password
     );
 
 }
