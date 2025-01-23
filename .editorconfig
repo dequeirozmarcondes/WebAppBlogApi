@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# SYSLIB0057: O tipo ou membro é obsoleto
+dotnet_diagnostic.SYSLIB0057.severity = none
